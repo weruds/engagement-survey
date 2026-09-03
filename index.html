@@ -5588,14 +5588,26 @@ function buildCarDiagram(car) {
 }
 
 
-// 
+//
 // INIT
-// 
+//
+// On mobile, default to initial-survey page; on desktop default to overview
+const _isMobile = window.innerWidth < 769;
+if (_isMobile) {
+  currentPage = 'initial-survey';
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  const isPage = document.getElementById('page-initial-survey');
+  if (isPage) isPage.classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  const isNav = document.querySelector('[data-page="initial-survey"]');
+  if (isNav) isNav.classList.add('active');
+}
+
 // Boot from localStorage immediately (instant paint)
 if (state.engagement || _soonestActivity()) startCountdown();
 initDate();
 updateCounts();
-renderOverview();
+renderPage(currentPage);
 
 // Then connect Firestore — onSnapshot will refresh the UI once live data arrives
 initFirebase();
