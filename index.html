@@ -5843,104 +5843,45 @@ function initialSurveyFormHTML() {
   return `
     <div class="card" style="margin-bottom:20px;">
 
-      <!-- Q1: Role -->
+      <!-- Q1: Name -->
       <div class="sq-block" style="margin-bottom:20px;">
-        <div class="sq-label"><span class="sq-label-num">1</span> What is your role on the team?</div>
-        <div class="sq-chips" id="isv-chips-1" style="padding-left:28px;margin-top:8px;">
-          <span class="sq-chip" onclick="isvSetChip(1,this)"> Developer</span>
-          <span class="sq-chip" onclick="isvSetChip(1,this)"> QE / Tester</span>
-          <span class="sq-chip" onclick="isvSetChip(1,this)"> OneInfra</span>
-          <span class="sq-chip" onclick="isvSetChip(1,this)"> Other</span>
-        </div>
-      </div>
-      <div class="sq-divider" style="margin-bottom:20px;"></div>
-
-      <!-- Q2: Availability -->
-      <div class="sq-block" style="margin-bottom:20px;">
-        <div class="sq-label"><span class="sq-label-num">2</span> Are you available to join engagement activities?</div>
-        <div class="sq-chips" id="isv-chips-2" style="padding-left:28px;margin-top:8px;">
-          <span class="sq-chip" onclick="isvSetChip(2,this)"> Yes, definitely</span>
-          <span class="sq-chip" onclick="isvSetChip(2,this)"> Most likely</span>
-          <span class="sq-chip" onclick="isvSetChip(2,this)"> Depends on schedule</span>
-          <span class="sq-chip" onclick="isvSetChip(2,this)"> Not sure yet</span>
-        </div>
-      </div>
-      <div class="sq-divider" style="margin-bottom:20px;"></div>
-
-      <!-- Q3: Preferred activity types (multi) -->
-      <div class="sq-block" style="margin-bottom:20px;">
-        <div class="sq-label"><span class="sq-label-num">3</span> What types of activities do you enjoy?</div>
-        <div class="sq-sub">Select all that apply</div>
-        <div class="sq-chips" id="isv-chips-3" style="padding-left:28px;margin-top:8px;">
-          <span class="sq-chip multi" onclick="isvToggleChip(this)"> Beach / Outdoor</span>
-          <span class="sq-chip multi" onclick="isvToggleChip(this)"> Food &amp; Dining</span>
-          <span class="sq-chip multi" onclick="isvToggleChip(this)"> Games &amp; Fun</span>
-          <span class="sq-chip multi" onclick="isvToggleChip(this)"> Staycation</span>
-          <span class="sq-chip multi" onclick="isvToggleChip(this)"> Karaoke / Music</span>
-          <span class="sq-chip multi" onclick="isvToggleChip(this)"> Sports / Fitness</span>
-          <span class="sq-chip multi" onclick="isvToggleChip(this)"> Arts &amp; Crafts</span>
-          <span class="sq-chip multi" onclick="isvToggleChip(this)"> Out-of-town Trip</span>
-        </div>
-      </div>
-      <div class="sq-divider" style="margin-bottom:20px;"></div>
-
-      <!-- Q4: Preferred schedule -->
-      <div class="sq-block" style="margin-bottom:20px;">
-        <div class="sq-label"><span class="sq-label-num">4</span> When are you usually free for team activities?</div>
-        <div class="sq-chips" id="isv-chips-4" style="padding-left:28px;margin-top:8px;">
-          <span class="sq-chip" onclick="isvSetChip(4,this)"> Weekday mornings</span>
-          <span class="sq-chip" onclick="isvSetChip(4,this)"> Weekday evenings</span>
-          <span class="sq-chip" onclick="isvSetChip(4,this)"> Weekends</span>
-          <span class="sq-chip" onclick="isvSetChip(4,this)"> Long weekends / Holidays</span>
-          <span class="sq-chip" onclick="isvSetChip(4,this)"> No strong preference</span>
-        </div>
-      </div>
-      <div class="sq-divider" style="margin-bottom:20px;"></div>
-
-      <!-- Q5: Budget comfort -->
-      <div class="sq-block" style="margin-bottom:20px;">
-        <div class="sq-label"><span class="sq-label-num">5</span> What is your comfortable spending range per activity?</div>
-        <div class="sq-chips" id="isv-chips-5" style="padding-left:28px;margin-top:8px;">
-          <span class="sq-chip" onclick="isvSetChip(5,this)">₱0 – ₱500</span>
-          <span class="sq-chip" onclick="isvSetChip(5,this)">₱500 – ₱1,000</span>
-          <span class="sq-chip" onclick="isvSetChip(5,this)">₱1,000 – ₱2,000</span>
-          <span class="sq-chip" onclick="isvSetChip(5,this)">₱2,000 – ₱5,000</span>
-          <span class="sq-chip" onclick="isvSetChip(5,this)">₱5,000+</span>
-        </div>
-      </div>
-      <div class="sq-divider" style="margin-bottom:20px;"></div>
-
-      <!-- Q6: Dietary / special needs -->
-      <div class="sq-block" style="margin-bottom:20px;">
-        <div class="sq-label"><span class="sq-label-num">6</span> Any dietary restrictions or special considerations?</div>
-        <div class="sq-chips" id="isv-chips-6" style="padding-left:28px;margin-top:8px;">
-          <span class="sq-chip" onclick="isvSetChip(6,this)">None</span>
-          <span class="sq-chip" onclick="isvSetChip(6,this)"> No pork</span>
-          <span class="sq-chip" onclick="isvSetChip(6,this)"> Pescatarian</span>
-          <span class="sq-chip" onclick="isvSetChip(6,this)"> Vegetarian</span>
-          <span class="sq-chip" onclick="isvSetChip(6,this)"> Gluten-free</span>
-          <span class="sq-chip" onclick="isvSetChip(6,this)"> Allergies</span>
-        </div>
-      </div>
-      <div class="sq-divider" style="margin-bottom:20px;"></div>
-
-      <!-- Q7: Name (optional) -->
-      <div class="sq-block" style="margin-bottom:20px;">
-        <div class="sq-label"><span class="sq-label-num">7</span> Your name <span style="font-weight:400;color:var(--muted2);">(optional)</span></div>
+        <div class="sq-label"><span class="sq-label-num">1</span> Name <span style="color:var(--danger);margin-left:2px;">*</span></div>
         <input class="form-input" id="isv-name" placeholder="e.g. Juan dela Cruz" style="margin-top:8px;" />
       </div>
       <div class="sq-divider" style="margin-bottom:20px;"></div>
 
-      <!-- Q8: Open suggestions -->
+      <!-- Q2: IBM Email -->
+      <div class="sq-block" style="margin-bottom:20px;">
+        <div class="sq-label"><span class="sq-label-num">2</span> IBM Email <span style="color:var(--danger);margin-left:2px;">*</span></div>
+        <input class="form-input" id="isv-email" type="email" placeholder="e.g. juandelacruz@ph.ibm.com" style="margin-top:8px;" />
+      </div>
+      <div class="sq-divider" style="margin-bottom:20px;"></div>
+
+      <!-- Q3: Attendance -->
+      <div class="sq-block" style="margin-bottom:20px;">
+        <div class="sq-label"><span class="sq-label-num">3</span> Will you be able to attend our ODC SEET Yearend Party? <span style="color:var(--danger);margin-left:2px;">*</span></div>
+        <select class="form-select" id="isv-attend" style="margin-top:8px;">
+          <option value="">— Select —</option>
+          <option value="Yes">Yes</option>
+          <option value="No">No</option>
+        </select>
+      </div>
+      <div class="sq-divider" style="margin-bottom:20px;"></div>
+
+      <!-- Q4: Preferred Date -->
       <div class="sq-block" style="margin-bottom:24px;">
-        <div class="sq-label"><span class="sq-label-num">8</span> Any activity ideas or suggestions for the team?</div>
-        <textarea class="sq-textarea" id="isv-comment"
-          placeholder="Share any ideas — places, games, food spots, anything!" style="margin-top:8px;"></textarea>
+        <div class="sq-label"><span class="sq-label-num">4</span> Choose your preferred date <span style="color:var(--danger);margin-left:2px;">*</span></div>
+        <select class="form-select" id="isv-date" style="margin-top:8px;">
+          <option value="">— Select a date —</option>
+          <option value="Nov 28-29">Nov 28–29</option>
+          <option value="Dec 5-6">Dec 5–6</option>
+          <option value="Dec 12-13">Dec 12–13</option>
+        </select>
       </div>
 
       <!-- Actions -->
       <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
-        <span style="font-size:11px;color:var(--muted2);">Responses saved to Firestore · anonymous unless you add your name.</span>
+        <span style="font-size:11px;color:var(--muted2);">All fields are required. Responses saved to Firestore.</span>
         <div style="display:flex;gap:8px;">
           <button class="btn btn-ghost btn-sm" onclick="resetInitialSurveyPage()">Reset</button>
           <button class="btn btn-primary" onclick="submitInitialSurvey()">Submit </button>
@@ -6019,21 +5960,20 @@ function resetInitialSurveyPage() {
 }
 
 function submitInitialSurvey() {
-  const role       = _isvSingle[1] || '';
-  const available  = _isvSingle[2] || '';
-  const activities = _isvMulti['isv-chips-3'] ? [..._isvMulti['isv-chips-3']].join(', ') : '';
-  const schedule   = _isvSingle[4] || '';
-  const budget     = _isvSingle[5] || '';
-  const dietary    = _isvSingle[6] || '';
-  const name       = (document.getElementById('isv-name')?.value || '').trim();
-  const comment    = (document.getElementById('isv-comment')?.value || '').trim();
+  const name   = (document.getElementById('isv-name')?.value || '').trim();
+  const email  = (document.getElementById('isv-email')?.value || '').trim();
+  const attend = (document.getElementById('isv-attend')?.value || '').trim();
+  const date   = (document.getElementById('isv-date')?.value || '').trim();
 
-  if (!role && !available) { showToast('Please answer at least one question.',''); return; }
+  if (!name)   { showToast('Name is required.', ''); return; }
+  if (!email)  { showToast('IBM Email is required.', ''); return; }
+  if (!attend) { showToast('Please select your attendance.', ''); return; }
+  if (!date)   { showToast('Please choose a preferred date.', ''); return; }
 
   const response = {
     id: uid(),
     submittedAt: new Date().toISOString(),
-    name, role, available, activities, schedule, budget, dietary, comment,
+    name, email, attend, date,
   };
 
   // Save to localStorage
@@ -6043,7 +5983,7 @@ function submitInitialSurvey() {
     localStorage.setItem(INITIAL_SURVEY_KEY, JSON.stringify(saved));
   } catch(e) {}
 
-  // Save to Firestore (separate collection)
+  // Save to Firestore
   if (_fbDb) {
     _fbDb.collection('initial_survey_responses').add(response)
       .catch(e => console.warn('Initial survey Firestore error:', e));
@@ -6053,21 +5993,18 @@ function submitInitialSurvey() {
   const thankYou = `
     <div class="card">
       <div class="survey-submitted">
-        <div class="survey-submitted-icon"></div>
-        <div class="survey-submitted-title">Thanks${name ? ', ' + name.split(' ')[0] + '!' : '!'}</div>
+        <div class="survey-submitted-icon">🎉</div>
+        <div class="survey-submitted-title">Thanks, ${name.split(' ')[0]}!</div>
         <div class="survey-submitted-sub">
-          Your initial response has been recorded.<br>
-          The organizer will use this to plan activities that everyone will enjoy.
+          Your response has been recorded.<br>
+          See you at the ODC SEET Yearend Party!
         </div>
         <div style="margin-top:16px;padding:12px 16px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);font-size:12px;color:var(--muted);text-align:left;width:100%;max-width:420px;">
           <div style="font-weight:700;color:var(--white);margin-bottom:8px;">Your response summary</div>
-          ${role       ? `<div> Role: ${role}</div>` : ''}
-          ${available  ? `<div> Availability: ${available}</div>` : ''}
-          ${schedule   ? `<div> Best schedule: ${schedule}</div>` : ''}
-          ${budget     ? `<div> Budget: ${budget}</div>` : ''}
-          ${dietary    ? `<div> Dietary: ${dietary}</div>` : ''}
-          ${activities ? `<div> Likes: ${activities}</div>` : ''}
-          ${comment    ? `<div> Ideas: "${comment}"</div>` : ''}
+          <div> Name: ${name}</div>
+          <div> Email: ${email}</div>
+          <div> Attending: ${attend}</div>
+          <div> Preferred date: ${date}</div>
         </div>
         <button class="btn btn-ghost btn-sm" onclick="resetInitialSurveyPage()" style="margin-top:12px;">↩ Submit another response</button>
       </div>
@@ -6075,7 +6012,7 @@ function submitInitialSurvey() {
 
   const pageBody = document.getElementById('initial-survey-page-body');
   if (pageBody) pageBody.innerHTML = thankYou;
-  showToast('Initial survey submitted! ', '');
+  showToast('Response submitted! 🎉', '');
 }
 </script>
 
