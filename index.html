@@ -6005,12 +6005,16 @@ function submitInitialSurvey() {
     localStorage.setItem(INITIAL_SURVEY_KEY, JSON.stringify(saved));
   } catch(e) {}
 
-  // Save to seet-engagement Firestore → survey/engagement_survey/responses
+  // Save to seet-engagement Firestore → survey/engagement_survey (array merge)
   const surveyDb = getSurveyDb();
   if (surveyDb) {
     surveyDb.collection('survey').doc('engagement_survey')
-      .collection('responses').add(response)
-      .catch(e => console.warn('Survey write error:', e));
+      .set({ responses: firebase.firestore.FieldValue.arrayUnion(response) }, { merge: true })
+      .then(() => console.log('Survey response saved to seet-engagement.'))
+      .catch(e => {
+        console.error('Survey write error:', e);
+        showToast('Could not save to server. Please try again.', '⚠️');
+      });
   }
 
   // Thank-you state
