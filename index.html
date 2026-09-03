@@ -5879,9 +5879,21 @@ function initialSurveyFormHTML() {
       </div>
       <div class="sq-divider" style="margin-bottom:20px;"></div>
 
-      <!-- Q3: Attendance -->
+      <!-- Q3: Service Line -->
       <div class="sq-block" style="margin-bottom:20px;">
-        <div class="sq-label"><span class="sq-label-num">3</span> Will you be able to attend our ODC SEET Yearend Party? <span style="color:var(--danger);margin-left:2px;">*</span></div>
+        <div class="sq-label"><span class="sq-label-num">3</span> Service Line <span style="color:var(--danger);margin-left:2px;">*</span></div>
+        <select class="form-select" id="isv-service" style="margin-top:8px;">
+          <option value="">— Select —</option>
+          <option value="Dev">Dev</option>
+          <option value="QE">QE</option>
+          <option value="OneInfra">OneInfra</option>
+        </select>
+      </div>
+      <div class="sq-divider" style="margin-bottom:20px;"></div>
+
+      <!-- Q4: Attendance -->
+      <div class="sq-block" style="margin-bottom:20px;">
+        <div class="sq-label"><span class="sq-label-num">4</span> Will you be able to attend our ODC SEET Yearend Party? <span style="color:var(--danger);margin-left:2px;">*</span></div>
         <select class="form-select" id="isv-attend" style="margin-top:8px;">
           <option value="">— Select —</option>
           <option value="Yes">Yes</option>
@@ -5890,9 +5902,9 @@ function initialSurveyFormHTML() {
       </div>
       <div class="sq-divider" style="margin-bottom:20px;"></div>
 
-      <!-- Q4: Preferred Date -->
+      <!-- Q5: Preferred Date -->
       <div class="sq-block" style="margin-bottom:24px;">
-        <div class="sq-label"><span class="sq-label-num">4</span> Choose your preferred date <span style="color:var(--danger);margin-left:2px;">*</span></div>
+        <div class="sq-label"><span class="sq-label-num">5</span> Choose your preferred date <span style="color:var(--danger);margin-left:2px;">*</span></div>
         <select class="form-select" id="isv-date" style="margin-top:8px;">
           <option value="">— Select a date —</option>
           <option value="Nov 28-29">Nov 28–29</option>
@@ -5982,15 +5994,17 @@ function resetInitialSurveyPage() {
 }
 
 function submitInitialSurvey() {
-  const name   = (document.getElementById('isv-name')?.value || '').trim();
-  const email  = (document.getElementById('isv-email')?.value || '').trim().toLowerCase();
-  const attend = (document.getElementById('isv-attend')?.value || '').trim();
-  const date   = (document.getElementById('isv-date')?.value || '').trim();
+  const name    = (document.getElementById('isv-name')?.value || '').trim();
+  const email   = (document.getElementById('isv-email')?.value || '').trim().toLowerCase();
+  const service = (document.getElementById('isv-service')?.value || '').trim();
+  const attend  = (document.getElementById('isv-attend')?.value || '').trim();
+  const date    = (document.getElementById('isv-date')?.value || '').trim();
 
-  if (!name)   { showToast('Name is required.', ''); return; }
-  if (!email)  { showToast('IBM Email is required.', ''); return; }
-  if (!attend) { showToast('Please select your attendance.', ''); return; }
-  if (!date)   { showToast('Please choose a preferred date.', ''); return; }
+  if (!name)    { showToast('Name is required.', ''); return; }
+  if (!email)   { showToast('IBM Email is required.', ''); return; }
+  if (!service) { showToast('Please select your Service Line.', ''); return; }
+  if (!attend)  { showToast('Please select your attendance.', ''); return; }
+  if (!date)    { showToast('Please choose a preferred date.', ''); return; }
 
   const submitBtn = document.querySelector('#initial-survey-page-body .btn-primary');
   const resetBtn  = (msg) => { if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Submit 🎉'; } if (msg) showToast(msg, '⚠️'); };
@@ -6015,6 +6029,7 @@ function submitInitialSurvey() {
           <div style="font-weight:700;color:var(--white);margin-bottom:8px;">Your response summary</div>
           <div>👤 Name: ${name}</div>
           <div>📧 Email: ${email}</div>
+          <div>🏢 Service Line: ${service}</div>
           <div>✅ Attending: ${attend}</div>
           <div>📅 Preferred date: ${date}</div>
         </div>
@@ -6039,7 +6054,7 @@ function submitInitialSurvey() {
     }
 
     // Step 2: no duplicate — write to Firestore
-    const response = { id: uid(), submittedAt: new Date().toISOString(), name, email, attend, date };
+    const response = { id: uid(), submittedAt: new Date().toISOString(), name, email, service, attend, date };
 
     if (submitBtn) submitBtn.textContent = 'Saving…';
 
