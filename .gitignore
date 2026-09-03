@@ -8,3 +8,6 @@ Thumbs.db
 # Secrets
 .env
 *.env.local
+
+# Firebase local cache
+.firebase/
