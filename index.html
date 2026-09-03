@@ -6037,6 +6037,24 @@ function submitInitialSurvey() {
       </div>
     </div>`;
 
+  const showDupeError = (msg) => {
+    const pageBody = document.getElementById('initial-survey-page-body');
+    if (pageBody) pageBody.innerHTML = `
+      <div class="card">
+        <div class="survey-submitted">
+          <div class="survey-submitted-icon">⚠️</div>
+          <div class="survey-submitted-title" style="color:var(--danger);">Already Submitted</div>
+          <div class="survey-submitted-sub">${msg}</div>
+          <div style="margin-top:16px;padding:12px 16px;background:rgba(220,38,38,0.06);border:1px solid rgba(220,38,38,0.2);border-radius:var(--radius-sm);font-size:12px;color:var(--muted);text-align:left;width:100%;max-width:420px;">
+            <div style="font-weight:700;color:var(--danger);margin-bottom:6px;">Duplicate entry detected</div>
+            <div>Name: <strong>${name}</strong></div>
+            <div>Email: <strong>${email}</strong></div>
+          </div>
+          <button class="btn btn-ghost btn-sm" onclick="resetInitialSurveyPage()" style="margin-top:16px;">↩ Go back and edit</button>
+        </div>
+      </div>`;
+  };
+
   // Step 1: read existing responses — check for duplicates
   docRef.get().then(snap => {
     const existing = (snap.exists && Array.isArray(snap.data().responses)) ? snap.data().responses : [];
@@ -6049,7 +6067,7 @@ function submitInitialSurvey() {
         ? 'You have already submitted a response.'
         : dupeByName ? 'A response with this name already exists.'
         : 'A response with this email already exists.';
-      resetBtn(msg);
+      showDupeError(msg);
       return;
     }
 
