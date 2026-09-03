@@ -5607,7 +5607,7 @@ if (_isMobile) {
 if (state.engagement || _soonestActivity()) startCountdown();
 initDate();
 updateCounts();
-renderPage(currentPage);
+// renderPage deferred to after all scripts load (see bottom of second script block)
 
 // Then connect Firestore — onSnapshot will refresh the UI once live data arrives
 initFirebase();
@@ -6110,6 +6110,9 @@ function submitInitialSurvey() {
     resetBtn('Could not connect to server. Please try again.');
   });
 }
+
+// Initial render — deferred here so renderInitialSurveyPage() is defined
+renderPage(currentPage);
 </script>
 
 </body>
