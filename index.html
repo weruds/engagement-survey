@@ -3156,6 +3156,16 @@ const FB_FIRESTORE_CONFIG = {
   measurementId:     "G-EQSJE9T7HS"
 };
 
+// Secondary Firebase project — seet-engagement — used only for survey response writes
+const FB_SURVEY_CONFIG = {
+  apiKey:            "AIzaSyCxmPWW9nh_IPq77Hyqm6k8dWOlcLnmM4k",
+  authDomain:        "seet-engagement.firebaseapp.com",
+  projectId:         "seet-engagement",
+  storageBucket:     "seet-engagement.firebasestorage.app",
+  messagingSenderId: "180830723590",
+  appId:             "1:180830723590:web:84793524d562556e1bad87"
+};
+
 const FB_COLLECTION = 'planner';
 const FB_DOC_ID     = 'engagement_planner';
 
@@ -3163,6 +3173,18 @@ let _fbApp  = null;
 let _fbDb   = null;
 let _fbDocRef = null;
 let _fbUnsubscribe = null;
+
+// Secondary db instance for survey writes
+let _fbSurveyDb = null;
+function getSurveyDb() {
+  if (_fbSurveyDb) return _fbSurveyDb;
+  try {
+    const app = firebase.apps.find(a => a.name === 'survey') ||
+                firebase.initializeApp(FB_SURVEY_CONFIG, 'survey');
+    _fbSurveyDb = firebase.firestore(app);
+  } catch(e) { console.warn('Survey DB init error:', e); }
+  return _fbSurveyDb;
+}
 
 function setFbStatus(status, text) {
   const dot = document.getElementById('fb-dot');
@@ -5983,10 +6005,12 @@ function submitInitialSurvey() {
     localStorage.setItem(INITIAL_SURVEY_KEY, JSON.stringify(saved));
   } catch(e) {}
 
-  // Save to Firestore
-  if (_fbDb) {
-    _fbDb.collection('initial_survey_responses').add(response)
-      .catch(e => console.warn('Initial survey Firestore error:', e));
+  // Save to seet-engagement Firestore → survey/engagement_survey/responses
+  const surveyDb = getSurveyDb();
+  if (surveyDb) {
+    surveyDb.collection('survey').doc('engagement_survey')
+      .collection('responses').add(response)
+      .catch(e => console.warn('Survey write error:', e));
   }
 
   // Thank-you state
