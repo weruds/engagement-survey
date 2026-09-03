@@ -5,10 +5,9 @@ service cloud.firestore {
     match /planner/{document=**} {
       allow read, write: if true;
     }
-    // Survey responses — anyone can write, no one can read from client
+    // Survey responses — read allowed for duplicate check, write allowed for submissions
     match /survey/{document=**} {
-      allow write: if true;
-      allow read: if false;
+      allow read, write: if true;
     }
   }
 }

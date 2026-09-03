@@ -5983,7 +5983,7 @@ function resetInitialSurveyPage() {
 
 function submitInitialSurvey() {
   const name   = (document.getElementById('isv-name')?.value || '').trim();
-  const email  = (document.getElementById('isv-email')?.value || '').trim();
+  const email  = (document.getElementById('isv-email')?.value || '').trim().toLowerCase();
   const attend = (document.getElementById('isv-attend')?.value || '').trim();
   const date   = (document.getElementById('isv-date')?.value || '').trim();
 
@@ -5992,55 +5992,100 @@ function submitInitialSurvey() {
   if (!attend) { showToast('Please select your attendance.', ''); return; }
   if (!date)   { showToast('Please choose a preferred date.', ''); return; }
 
-  const response = {
-    id: uid(),
-    submittedAt: new Date().toISOString(),
-    name, email, attend, date,
+  // Disable submit button while checking
+  const submitBtn = document.querySelector('#initial-survey-page-body .btn-primary');
+  if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Submitting…'; }
+
+  const surveyDb = getSurveyDb();
+  const docRef = surveyDb
+    ? surveyDb.collection('survey').doc('engagement_survey')
+    : null;
+
+  // Read existing responses to check for duplicates
+  const proceed = (existingResponses) => {
+    const nameLower  = name.toLowerCase();
+    const dupeByName  = existingResponses.some(r => r.name  && r.name.toLowerCase()  === nameLower);
+    const dupeByEmail = existingResponses.some(r => r.email && r.email.toLowerCase() === email);
+
+    if (dupeByName && dupeByEmail) {
+      showToast('You have already submitted a response.', '⚠️');
+      if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Submit 🎉'; }
+      return;
+    }
+    if (dupeByName) {
+      showToast('A response with this name already exists.', '⚠️');
+      if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Submit 🎉'; }
+      return;
+    }
+    if (dupeByEmail) {
+      showToast('A response with this email already exists.', '⚠️');
+      if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Submit 🎉'; }
+      return;
+    }
+
+    const response = {
+      id: uid(),
+      submittedAt: new Date().toISOString(),
+      name, email, attend, date,
+    };
+
+    // Save to localStorage
+    try {
+      const saved = JSON.parse(localStorage.getItem(INITIAL_SURVEY_KEY) || '[]');
+      saved.push(response);
+      localStorage.setItem(INITIAL_SURVEY_KEY, JSON.stringify(saved));
+    } catch(e) {}
+
+    // Write to seet-engagement Firestore
+    if (docRef) {
+      docRef.set({ responses: firebase.firestore.FieldValue.arrayUnion(response) }, { merge: true })
+        .then(() => console.log('Survey response saved to seet-engagement.'))
+        .catch(e => {
+          console.error('Survey write error:', e);
+          showToast('Could not save to server. Please try again.', '⚠️');
+        });
+    }
+
+    // Thank-you state
+    const thankYou = `
+      <div class="card">
+        <div class="survey-submitted">
+          <div class="survey-submitted-icon">🎉</div>
+          <div class="survey-submitted-title">Thanks, ${name.split(' ')[0]}!</div>
+          <div class="survey-submitted-sub">
+            Your response has been recorded.<br>
+            See you at the ODC SEET Yearend Party!
+          </div>
+          <div style="margin-top:16px;padding:12px 16px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);font-size:12px;color:var(--muted);text-align:left;width:100%;max-width:420px;">
+            <div style="font-weight:700;color:var(--white);margin-bottom:8px;">Your response summary</div>
+            <div>👤 Name: ${name}</div>
+            <div>📧 Email: ${email}</div>
+            <div>✅ Attending: ${attend}</div>
+            <div>📅 Preferred date: ${date}</div>
+          </div>
+          <button class="btn btn-ghost btn-sm" onclick="resetInitialSurveyPage()" style="margin-top:12px;">↩ Submit another response</button>
+        </div>
+      </div>`;
+
+    const pageBody = document.getElementById('initial-survey-page-body');
+    if (pageBody) pageBody.innerHTML = thankYou;
+    showToast('Response submitted! 🎉', '');
   };
 
-  // Save to localStorage
-  try {
-    const saved = JSON.parse(localStorage.getItem(INITIAL_SURVEY_KEY) || '[]');
-    saved.push(response);
-    localStorage.setItem(INITIAL_SURVEY_KEY, JSON.stringify(saved));
-  } catch(e) {}
-
-  // Save to seet-engagement Firestore → survey/engagement_survey (array merge)
-  const surveyDb = getSurveyDb();
-  if (surveyDb) {
-    surveyDb.collection('survey').doc('engagement_survey')
-      .set({ responses: firebase.firestore.FieldValue.arrayUnion(response) }, { merge: true })
-      .then(() => console.log('Survey response saved to seet-engagement.'))
+  // Fetch existing responses first, then proceed
+  if (docRef) {
+    docRef.get()
+      .then(snap => {
+        const existing = (snap.exists && snap.data().responses) ? snap.data().responses : [];
+        proceed(existing);
+      })
       .catch(e => {
-        console.error('Survey write error:', e);
-        showToast('Could not save to server. Please try again.', '⚠️');
+        console.warn('Could not fetch existing responses, proceeding without dupe check:', e);
+        proceed([]);
       });
+  } else {
+    proceed([]);
   }
-
-  // Thank-you state
-  const thankYou = `
-    <div class="card">
-      <div class="survey-submitted">
-        <div class="survey-submitted-icon">🎉</div>
-        <div class="survey-submitted-title">Thanks, ${name.split(' ')[0]}!</div>
-        <div class="survey-submitted-sub">
-          Your response has been recorded.<br>
-          See you at the ODC SEET Yearend Party!
-        </div>
-        <div style="margin-top:16px;padding:12px 16px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);font-size:12px;color:var(--muted);text-align:left;width:100%;max-width:420px;">
-          <div style="font-weight:700;color:var(--white);margin-bottom:8px;">Your response summary</div>
-          <div> Name: ${name}</div>
-          <div> Email: ${email}</div>
-          <div> Attending: ${attend}</div>
-          <div> Preferred date: ${date}</div>
-        </div>
-        <button class="btn btn-ghost btn-sm" onclick="resetInitialSurveyPage()" style="margin-top:12px;">↩ Submit another response</button>
-      </div>
-    </div>`;
-
-  const pageBody = document.getElementById('initial-survey-page-body');
-  if (pageBody) pageBody.innerHTML = thankYou;
-  showToast('Response submitted! 🎉', '');
 }
 </script>
 
